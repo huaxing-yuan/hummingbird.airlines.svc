@@ -2,7 +2,7 @@
 Middleware and Backend Services used in the hummingbird airlines application. 
 
 ## License
-This service/application is used only to demostrate the different functionalities of Hummingbird and Hummingbird Test Framwwork (http://hummingbird-alm.com).
+This service/application is used only to demostrate the different functionalities of Hummingbird and Hummingbird Test Framework (http://hummingbird-alm.com).
 It is not allowed to use these services other than following usages:
  - Demostrate Hummingbird and Test Framework
  - Learn and Test Hummingbird and its components
