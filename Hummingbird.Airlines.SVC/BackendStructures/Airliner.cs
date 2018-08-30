@@ -10,19 +10,19 @@ namespace Hummingbird.Airlines.SVC.BackendStructures
     [DataContract(Namespace = "http://www.hummingbird-alm.com/example/airlines/BE")]
     public class Airliner
     {
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public AircraftManufactures Manufacture { get; set; }
 
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public string Type { get; set; }
 
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public string TailNumber { get; set; }
 
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public DateTime DeliveryDate { get; set; }
 
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public uint PassengerCapacity { get; set; }
     }
 }

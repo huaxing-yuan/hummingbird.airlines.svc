@@ -10,10 +10,10 @@ namespace Hummingbird.Airlines.SVC.BackendStructures
     [DataContract(Namespace = "http://www.hummingbird-alm.com/example/airlines/BE")]
     public class SeatReservation
     {
-        [DataMember]
+        [DataMember(IsRequired =true)]
         public SeatClass Class { get; set; }
 
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public string SeatNumber { get; set; }
 
     }

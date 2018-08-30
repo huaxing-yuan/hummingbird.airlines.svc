@@ -8,23 +8,15 @@ using System.Threading.Tasks;
 namespace Hummingbird.Airlines.SVC.BackendStructures
 {
     [DataContract(Namespace = "http://www.hummingbird-alm.com/example/airlines/BE")]
-    public class Luggage
+    public class FlightInfoRequest
     {
         [DataMember(IsRequired = true)]
-        public string ID { get; set; }
+        public AirlineCodes Airline { get; set; }
 
         [DataMember(IsRequired = true)]
-        public LuggageTypes Type { get; set; }
-
+        public AirportCodes Airport { get; set; }
+            
         [DataMember(IsRequired = true)]
-        public string OwnerID { get; set; }
-
-        [DataMember(IsRequired = true)]
-        public float Weight { get; set; }
-
-        [DataMember(IsRequired = true)]
-        public LuggageSizes Size { get; set; }
-
-
+        public uint FlightNumber { get; set; }
     }
 }

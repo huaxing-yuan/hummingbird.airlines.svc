@@ -7,19 +7,17 @@ using System.Threading.Tasks;
 
 namespace Hummingbird.Airlines.SVC.BackendStructures
 {
-    /// <summary>
-    /// IATA Airport Codes
-    /// </summary>
     [DataContract(Namespace = "http://www.hummingbird-alm.com/example/airlines/BE")]
-    public enum SeatClass
+    public class LuggageRegistrationRequest
     {
-        [EnumMember]
-        FIRST_CLASS,
-        [EnumMember]
-        BUSINESS_CLASS,
-        [EnumMember]
-        PREMIUM_ECONOMY,
-        [EnumMember]
-        ECONOMY_CLASS
+
+        [DataMember(IsRequired = true)]
+        public FlightInformation Flight { get; set; }
+
+        [DataMember(IsRequired = true)]
+        PassengerNameRecord Passenger { get; set; }
+
+        [DataMember]
+        Luggage[] Luggages { get; set; }
     }
 }

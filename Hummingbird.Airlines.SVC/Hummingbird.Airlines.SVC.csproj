@@ -48,16 +48,24 @@
     <Compile Include="BackendStructures\AirlineCodes.cs" />
     <Compile Include="BackendStructures\Airliner.cs" />
     <Compile Include="BackendStructures\BookingInformation.cs" />
+    <Compile Include="BackendStructures\FlightInfoRequest.cs" />
     <Compile Include="BackendStructures\FlightInformation.cs" />
     <Compile Include="BackendStructures\FlightStatus.cs" />
     <Compile Include="BackendStructures\Luggage.cs" />
+    <Compile Include="BackendStructures\LuggageRegistrationRequest.cs" />
     <Compile Include="BackendStructures\LuggageSizes.cs" />
     <Compile Include="BackendStructures\LuggageTypes.cs" />
     <Compile Include="BackendStructures\PassengerNameRecord.cs" />
+    <Compile Include="BackendStructures\Reply.cs" />
     <Compile Include="BackendStructures\SeatClass.cs" />
     <Compile Include="BackendStructures\AirportCodes.cs" />
     <Compile Include="BackendStructures\SeatReservation.cs" />
+    <Compile Include="BookingSystemService.cs" />
+    <Compile Include="FlightManagementService.cs" />
+    <Compile Include="IFlightManagement.cs" />
     <Compile Include="IBookingSystem.cs" />
+    <Compile Include="ILuggageManagement.cs" />
+    <Compile Include="LuggageManagementService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -10,21 +10,21 @@ namespace Hummingbird.Airlines.SVC.BackendStructures
     [DataContract(Namespace = "http://www.hummingbird-alm.com/example/airlines/BE")]
     public enum AircraftManufactures
     {
-        [DataMember]
+        [EnumMember]
         AIRBUS,
-        [DataMember]
+        [EnumMember]
         BOEING,
-        [DataMember]
+        [EnumMember]
         UAC,
-        [DataMember]
+        [EnumMember]
         ANTONOV,
-        [DataMember]
+        [EnumMember]
         BOMBARDIER,
-        [DataMember]
+        [EnumMember]
         EMBRAER,
-        [DataMember]
+        [EnumMember]
         COMAC,
-        [DataMember]
+        [EnumMember]
         ATR
     }
 }

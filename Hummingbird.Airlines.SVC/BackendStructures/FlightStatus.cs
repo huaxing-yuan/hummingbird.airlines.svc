@@ -13,21 +13,21 @@ namespace Hummingbird.Airlines.SVC.BackendStructures
     [DataContract(Namespace = "http://www.hummingbird-alm.com/example/airlines/BE")]
     public enum FlightStatus
     {
-        [DataMember]
+        [EnumMember]
         PLANNED,
-        [DataMember]
+        [EnumMember]
         ON_BOARDING,
-        [DataMember]
+        [EnumMember]
         GATE_CLOSED,
-        [DataMember]
+        [EnumMember]
         IN_FLIGHT,
-        [DataMember]
+        [EnumMember]
         LANDED_TAXIING,
-        [DataMember]
+        [EnumMember]
         ARRIVED,
-        [DataMember]
+        [EnumMember]
         DELAYED,
-        [DataMember]
+        [EnumMember]
         CANCELLED
     }
 }

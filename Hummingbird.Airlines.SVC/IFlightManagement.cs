@@ -12,6 +12,6 @@ namespace Hummingbird.Airlines.SVC
     public interface IFlightManagement
     {
         [OperationContract(Action = "http://www.hummingbird-alm.com/example/airlines/BE/FlightInfo")]
-        FlightInformation FlightInfo(AirlineCodes airlineCode, AirportCodes airportCode, string flightNumber);
+        FlightInformation FlightInfo(FlightInfoRequest request);
     }
 }

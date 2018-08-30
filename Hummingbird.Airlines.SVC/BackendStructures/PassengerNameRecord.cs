@@ -10,16 +10,16 @@ namespace Hummingbird.Airlines.SVC.BackendStructures
     [DataContract(Namespace = "http://www.hummingbird-alm.com/example/airlines/BE")]
     public class PassengerNameRecord
     {
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public string PNR_ID { get; set; }
 
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public string Passport { get; set; }
 
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public string FirstName { get; set; }
 
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public string LastName { get; set; }
     }
 }

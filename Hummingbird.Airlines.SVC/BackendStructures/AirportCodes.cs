@@ -13,11 +13,11 @@ namespace Hummingbird.Airlines.SVC.BackendStructures
     [DataContract(Namespace = "http://www.hummingbird-alm.com/example/airlines/BE")]
     public enum AirportCodes
     {
-        [DataMember]
+        [EnumMember]
         CDG,
-        [DataMember]
+        [EnumMember]
         NRT,
-        [DataMember]
+        [EnumMember]
         PEK
     }
 }

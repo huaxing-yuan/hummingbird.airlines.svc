@@ -11,31 +11,31 @@ namespace Hummingbird.Airlines.SVC.BackendStructures
     [DataContract(Namespace = "http://www.hummingbird-alm.com/example/airlines/BE")]
     public class FlightInformation
     {
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public string ID { get; set; }
 
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public AirlineCodes AirlineCode { get; set; }
 
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public string AirlineName { get; set; }
 
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public uint FlightNumber { get; set; }
 
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public DateTime ExpectedDepartureTime { get; set; }
 
         [DataMember]
         public DateTime ExpectedArrivalTime { get; set; }
 
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public AirportCodes DepartureAirport { get; set; }
 
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public AirportCodes ArrivalAirport { get; set; }
 
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public string DepartureTerminal { get; set; }
 
         [DataMember]
@@ -47,13 +47,13 @@ namespace Hummingbird.Airlines.SVC.BackendStructures
         [DataMember]
         public string ArrivalGate { get; set; }
 
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public Airliner Aircraft { get; set; }
 
         [DataMember]
         public string ExpectedRunway { get; set; }
 
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public FlightStatus Status { get; set; }
 
     }
