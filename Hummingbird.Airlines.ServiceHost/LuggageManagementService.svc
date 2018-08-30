@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="Hummingbird.Airlines.ServiceHost.Service1" CodeBehind="LuggageManagementService.svc.cs" %>

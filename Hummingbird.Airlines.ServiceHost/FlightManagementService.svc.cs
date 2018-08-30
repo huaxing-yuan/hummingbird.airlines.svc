@@ -1,11 +1,13 @@
-﻿using System;
+﻿using Hummingbird.Airlines.SVC;
+using Hummingbird.Airlines.SVC.BackendStructures;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
+using System.ServiceModel;
 using System.Text;
-using System.Threading.Tasks;
-using Hummingbird.Airlines.SVC.BackendStructures;
 
-namespace Hummingbird.Airlines.SVC
+namespace Hummingbird.Airlines.ServiceHost
 {
     class FlightManagementService : IFlightManagement
     {

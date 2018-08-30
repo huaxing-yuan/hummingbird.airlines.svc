@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2042
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hummingbird.Airlines.SVC", "Hummingbird.Airlines.SVC\Hummingbird.Airlines.SVC.csproj", "{84D4A47B-E6F5-40BF-AC5B-66FDB4862E98}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hummingbird.Airlines.ServiceHost", "Hummingbird.Airlines.ServiceHost\Hummingbird.Airlines.ServiceHost.csproj", "{F8072EAA-D848-4C91-9C5E-AB5E4DF800AB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{84D4A47B-E6F5-40BF-AC5B-66FDB4862E98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{84D4A47B-E6F5-40BF-AC5B-66FDB4862E98}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{84D4A47B-E6F5-40BF-AC5B-66FDB4862E98}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{84D4A47B-E6F5-40BF-AC5B-66FDB4862E98}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8072EAA-D848-4C91-9C5E-AB5E4DF800AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8072EAA-D848-4C91-9C5E-AB5E4DF800AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8072EAA-D848-4C91-9C5E-AB5E4DF800AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8072EAA-D848-4C91-9C5E-AB5E4DF800AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
