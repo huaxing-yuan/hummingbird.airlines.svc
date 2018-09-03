@@ -96,6 +96,7 @@
   <ItemGroup>
     <Content Include="BookingSystemService.svc" />
     <Content Include="FlightManagementService.svc" />
+    <Content Include="index.html" />
     <Content Include="LuggageManagementService.svc" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -128,6 +129,10 @@
     <Compile Include="LuggageManagementService.svc.cs">
       <DependentUpon>LuggageManagementService.svc</DependentUpon>
     </Compile>
+    <Compile Include="MiddlewareStructures\ApiFault.cs" />
+    <Compile Include="MiddlewareStructures\GetBookingInfoResponse.cs" />
+    <Compile Include="MiddlewareStructures\GetBookingInfoRequest.cs" />
+    <Compile Include="MiddlewareStructures\Status.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -10,7 +10,7 @@ using System.Text;
 
 namespace Hummingbird.Airlines.ServiceHost
 {
-    class LuggageManagementService : ILuggageManagement
+    public class LuggageManagementService : ILuggageManagement
     {
         public Reply Registration(LuggageRegistrationRequest request)
         {
