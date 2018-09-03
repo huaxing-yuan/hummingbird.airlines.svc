@@ -95,6 +95,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="BookingSystemService.svc" />
+    <Content Include="EAIService.svc" />
     <Content Include="FlightManagementService.svc" />
     <Content Include="index.html" />
     <Content Include="LuggageManagementService.svc" />
@@ -103,6 +104,9 @@
   <ItemGroup>
     <Compile Include="..\Hummingbird.Airlines.Services\BookingSystemService.cs">
       <Link>BookingSystemService.cs</Link>
+    </Compile>
+    <Compile Include="..\Hummingbird.Airlines.Services\EAIServices.cs">
+      <Link>EAIServices.cs</Link>
     </Compile>
     <Compile Include="..\Hummingbird.Airlines.Services\FlightManagementService.cs">
       <Link>FlightManagementService.cs</Link>
