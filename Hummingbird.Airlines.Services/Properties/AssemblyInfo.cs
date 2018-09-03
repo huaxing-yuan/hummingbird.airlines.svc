@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Hummingbird.Airlines.ServiceHost")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Hummingbird.Airlines.Services")]
+[assembly: AssemblyDescription("Hummingbird airlines services")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Hummingbird.Airlines.ServiceHost")]
+[assembly: AssemblyProduct("Hummingbird.Airlines.Services")]
 [assembly: AssemblyCopyright("Copyright © 2018 Huaxing YUAN, All rights reserved")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("f8072eaa-d848-4c91-9c5e-ab5e4df800ab")]
+[assembly: Guid("dc4b970b-d7f9-4990-8edb-b45eb3f5ddf0")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -29,7 +29,7 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-// You can specify all the values or you can default the Revision and Build Numbers 
+// You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]

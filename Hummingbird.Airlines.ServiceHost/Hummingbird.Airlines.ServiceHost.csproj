@@ -101,38 +101,15 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BackendStructures\AircraftManufactures.cs" />
-    <Compile Include="BackendStructures\AirlineCodes.cs" />
-    <Compile Include="BackendStructures\Airliner.cs" />
-    <Compile Include="BackendStructures\AirportCodes.cs" />
-    <Compile Include="BackendStructures\BookingInformation.cs" />
-    <Compile Include="BackendStructures\FlightInfoRequest.cs" />
-    <Compile Include="BackendStructures\FlightInformation.cs" />
-    <Compile Include="BackendStructures\FlightStatus.cs" />
-    <Compile Include="BackendStructures\Luggage.cs" />
-    <Compile Include="BackendStructures\LuggageRegistrationRequest.cs" />
-    <Compile Include="BackendStructures\LuggageSizes.cs" />
-    <Compile Include="BackendStructures\LuggageTypes.cs" />
-    <Compile Include="BackendStructures\PassengerNameRecord.cs" />
-    <Compile Include="BackendStructures\Reply.cs" />
-    <Compile Include="BackendStructures\SeatClass.cs" />
-    <Compile Include="BackendStructures\SeatReservation.cs" />
-    <Compile Include="BookingSystemService.svc.cs">
-      <DependentUpon>BookingSystemService.svc</DependentUpon>
+    <Compile Include="..\Hummingbird.Airlines.Services\BookingSystemService.cs">
+      <Link>BookingSystemService.cs</Link>
     </Compile>
-    <Compile Include="FlightManagementService.svc.cs">
-      <DependentUpon>FlightManagementService.svc</DependentUpon>
+    <Compile Include="..\Hummingbird.Airlines.Services\FlightManagementService.cs">
+      <Link>FlightManagementService.cs</Link>
     </Compile>
-    <Compile Include="IBookingSystem.cs" />
-    <Compile Include="IFlightManagement.cs" />
-    <Compile Include="ILuggageManagement.cs" />
-    <Compile Include="LuggageManagementService.svc.cs">
-      <DependentUpon>LuggageManagementService.svc</DependentUpon>
+    <Compile Include="..\Hummingbird.Airlines.Services\LuggageManagementService.cs">
+      <Link>LuggageManagementService.cs</Link>
     </Compile>
-    <Compile Include="MiddlewareStructures\ApiFault.cs" />
-    <Compile Include="MiddlewareStructures\GetBookingInfoResponse.cs" />
-    <Compile Include="MiddlewareStructures\GetBookingInfoRequest.cs" />
-    <Compile Include="MiddlewareStructures\Status.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -149,6 +126,12 @@
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Hummingbird.Airlines.Services\Hummingbird.Airlines.Services.csproj">
+      <Project>{dc4b970b-d7f9-4990-8edb-b45eb3f5ddf0}</Project>
+      <Name>Hummingbird.Airlines.Services</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

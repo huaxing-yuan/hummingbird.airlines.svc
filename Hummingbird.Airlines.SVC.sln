@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.27703.2042
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hummingbird.Airlines.ServiceHost", "Hummingbird.Airlines.ServiceHost\Hummingbird.Airlines.ServiceHost.csproj", "{F8072EAA-D848-4C91-9C5E-AB5E4DF800AB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hummingbird.Airlines.Services", "Hummingbird.Airlines.Services\Hummingbird.Airlines.Services.csproj", "{DC4B970B-D7F9-4990-8EDB-B45EB3F5DDF0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{F8072EAA-D848-4C91-9C5E-AB5E4DF800AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F8072EAA-D848-4C91-9C5E-AB5E4DF800AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F8072EAA-D848-4C91-9C5E-AB5E4DF800AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC4B970B-D7F9-4990-8EDB-B45EB3F5DDF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC4B970B-D7F9-4990-8EDB-B45EB3F5DDF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC4B970B-D7F9-4990-8EDB-B45EB3F5DDF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC4B970B-D7F9-4990-8EDB-B45EB3F5DDF0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
