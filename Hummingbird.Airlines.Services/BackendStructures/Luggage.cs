@@ -9,7 +9,7 @@ namespace Hummingbird.Airlines.Services.BackendStructures
 {
     [DataContract(Namespace = "http://www.hummingbird-alm.com/example/airlines/BE")]
     [KnownType(typeof(CarryOnLuggage))]
-
+    [KnownType(typeof(WheeledLuggage))]
     public abstract class AbstractLuggage
     {
         [DataMember(IsRequired = true)]
