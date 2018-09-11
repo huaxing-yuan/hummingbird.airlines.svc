@@ -8,16 +8,9 @@ using System.Threading.Tasks;
 namespace Hummingbird.Airlines.Services.BackendStructures
 {
     [DataContract(Namespace = "http://www.hummingbird-alm.com/example/airlines/BE")]
-    public class LuggageRegistrationRequest
+    public class CarryOnLuggage : AbstractLuggage
     {
-
-        [DataMember(IsRequired = true)]
-        public FlightInformation Flight { get; set; }
-
-        [DataMember(IsRequired = true)]
-        PassengerNameRecord Passenger { get; set; }
-
         [DataMember]
-        AbstractLuggage[] Luggages { get; set; }
+        public bool IsVerified { get; set; }
     }
 }

@@ -49,6 +49,7 @@
     <Compile Include="BackendStructures\Airliner.cs" />
     <Compile Include="BackendStructures\AirportCodes.cs" />
     <Compile Include="BackendStructures\BookingInformation.cs" />
+    <Compile Include="BackendStructures\CarryOnLuggage.cs" />
     <Compile Include="BackendStructures\FlightInfoRequest.cs" />
     <Compile Include="BackendStructures\FlightInformation.cs" />
     <Compile Include="BackendStructures\FlightStatus.cs" />
@@ -60,6 +61,7 @@
     <Compile Include="BackendStructures\Reply.cs" />
     <Compile Include="BackendStructures\SeatClass.cs" />
     <Compile Include="BackendStructures\SeatReservation.cs" />
+    <Compile Include="BackendStructures\WheeledLuggage.cs" />
     <Compile Include="BookingSystemService.cs" />
     <Compile Include="BookingSystemServiceClient.cs" />
     <Compile Include="EAIServices.cs" />

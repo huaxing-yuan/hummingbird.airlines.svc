@@ -18,6 +18,6 @@ namespace Hummingbird.Airlines.Services.MiddlewareStructures
         SeatReservation SeatRequest { get; set; }
 
         [DataMember(IsRequired = true)]
-        Luggage[] Luggages { get; set; }
+        AbstractLuggage[] Luggages { get; set; }
     }
 }
