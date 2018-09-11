@@ -10,7 +10,7 @@ namespace Hummingbird.Airlines.Services.BackendStructures
     [DataContract(Namespace = "http://www.hummingbird-alm.com/example/airlines/BE")]
     public class CarryOnLuggage : AbstractLuggage
     {
-        [DataMember]
+        [DataMember(IsRequired = true)]
         public bool IsVerified { get; set; }
     }
 }

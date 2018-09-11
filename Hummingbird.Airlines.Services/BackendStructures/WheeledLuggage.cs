@@ -10,6 +10,7 @@ namespace Hummingbird.Airlines.Services.BackendStructures
     [DataContract(Namespace = "http://www.hummingbird-alm.com/example/airlines/BE")]
     public class WheeledLuggage : AbstractLuggage
     {
+        [DataMember(IsRequired = true)]
         public string TargetId { get; set; }
     }
 }
