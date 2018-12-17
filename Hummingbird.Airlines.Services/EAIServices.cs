@@ -12,7 +12,7 @@ namespace Hummingbird.Airlines.Services
     {
         static EaiFault fault = new EaiFault()
         {
-            Details = "This example service is not ye implemented",
+            Details = "This example service is not yet implemented",
             ErrorCode = -1,
         };
         public GetBookingInfoResponse GetBookingInformation(GetBookingInfoRequest request)

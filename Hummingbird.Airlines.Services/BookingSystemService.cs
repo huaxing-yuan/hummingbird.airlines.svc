@@ -11,7 +11,7 @@ namespace Hummingbird.Airlines.Services
 {
     public class BookingSystemService : IBookingSystem
     {
-        BookingInformation bi = new BookingInformation()
+        readonly BookingInformation bi = new BookingInformation()
         {
             AirlineName = "Air China",
             AirlineCode = AirlineCodes.CA,
@@ -23,8 +23,8 @@ namespace Hummingbird.Airlines.Services
             FlightNumber = 934,
             Passenger = new PassengerNameRecord()
             {
-                FirstName = "Huaxing",
-                LastName = "Yuan",
+                FirstName = "John",
+                LastName = "Doe",
                 Passport = "A098234514",
                 PNR_ID = Guid.NewGuid().ToString(),
             }
@@ -32,11 +32,13 @@ namespace Hummingbird.Airlines.Services
 
         public BookingInformation GetBookingInfoById(string requestId)
         {
+            bi.BookingId = requestId;
             return bi;
         }
 
         public BookingInformation GetBookingInfoByPassport(string passortId)
         {
+            bi.Passenger.Passport = passortId;
             return bi;
         }
     }

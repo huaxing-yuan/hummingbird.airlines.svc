@@ -1,4 +1,6 @@
 # hummingbird.airlines.svc
+![Hummingbird Airlines](Hummingbird-Airlines.png)
+
 Middle-ware and Back-end Services used in the hummingbird airlines application. 
 
 ## License

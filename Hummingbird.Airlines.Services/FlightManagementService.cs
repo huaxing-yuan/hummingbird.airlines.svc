@@ -32,8 +32,37 @@ namespace Hummingbird.Airlines.Services
                 ExpectedArrivalTime = DateTime.Now.AddDays(1),
                 ArrivalAirport = AirportCodes.CDG,
                 Status = FlightStatus.ON_BOARDING,
-                AirlineName = request.Airline.ToString(),
+                AirlineName = GetAirlineName(request.Airline),
             };
+        }
+
+        static string GetAirlineName(AirlineCodes code)
+        {
+            switch (code)
+            {
+                case AirlineCodes.AA:
+                    return "American Airlines";
+                case AirlineCodes.AF:
+                    return "Air France";
+                case AirlineCodes.BA:
+                    return "British Airways";
+                case AirlineCodes.CA:
+                    return "Air China";
+                case AirlineCodes.HA:
+                    return "Hummingbird Airlines";
+                case AirlineCodes.LH:
+                    return "Lufthansa";
+                case AirlineCodes.MH:
+                    return "Malaysia Airlines";
+                case AirlineCodes.NH:
+                    return "All Nippon Airways";
+                case AirlineCodes.SQ:
+                    return "Singapore Airlines";
+                case AirlineCodes.SU:
+                    return "Aeroflot Russian Airlines";
+                default:
+                    return "Unknown";
+            }
         }
     }
 }

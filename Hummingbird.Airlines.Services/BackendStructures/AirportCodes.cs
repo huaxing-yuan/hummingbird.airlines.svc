@@ -18,6 +18,24 @@ namespace Hummingbird.Airlines.Services.BackendStructures
         [EnumMember]
         NRT,
         [EnumMember]
-        PEK
+        PEK,
+        [EnumMember]
+        JFK,
+        [EnumMember]
+        JKT,
+        [EnumMember]
+        MOW,
+        [EnumMember]
+        BKK,
+        [EnumMember]
+        ATL,
+        [EnumMember]
+        DXB,
+        [EnumMember]
+        HKG,
+        [EnumMember]
+        LHR
+
+
     }
 }

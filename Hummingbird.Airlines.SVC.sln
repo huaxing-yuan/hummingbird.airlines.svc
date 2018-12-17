@@ -9,6 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hummingbird.Airlines.Servic
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F8EDACF5-3379-4885-AA83-C2AB2DD5CA16}"
 	ProjectSection(SolutionItems) = preProject
+		Hummingbird-Airlines.png = Hummingbird-Airlines.png
 		README.md = README.md
 	EndProjectSection
 EndProject
