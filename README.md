@@ -2,12 +2,11 @@
 ![Hummingbird Airlines](Hummingbird-Airlines.png)
 
 Middle-ware and Back-end Services used in the hummingbird airlines application. 
+The web service is deployed at https://hummingbirdalm.azurewebsites.net/airlines
 
 ## License
-This service/application is used only to demonstrate the different functionalities of Hummingbird and Hummingbird Test Framework (http://www.hummingbird-alm.com).
-It is not allowed to use these services other than following usages:
- - Demonstrate Hummingbird and Test Framework
- - Learn and Test Hummingbird and its components
+This service/application is used to demonstrate the different functionalities of a Soap Web Service, including inheritance. You can use this service to learn WSDL, SOAP and work with Atmosphere Studio (see: https://www.stellar-qa.com/).
+The Web Service is hosted on a free infrastructure which does not support heavy load. It is forbidden to use deployed service as target of heavy load calls.
 
 ## Backend services
 ### International Flight Reservation service
