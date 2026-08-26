@@ -1,0 +1,6 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Hummingbird.Airlines.Backend/Hummingbird.Airlines.Backend.csproj" />
+    <Project Path="src/Hummingbird.Airlines.Middleware/Hummingbird.Airlines.Middleware.csproj" />
+  </Folder>
+</Solution>

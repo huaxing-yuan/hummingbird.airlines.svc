@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="50 50 156 156" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <linearGradient id="spine-grad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="#00cec9" stop-opacity="1"/>
+      <stop offset="55%"  stop-color="#00a8a4" stop-opacity="0.7"/>
+      <stop offset="100%" stop-color="#3d35b0" stop-opacity="0.6"/>
+    </linearGradient>
+  </defs>
+  <path d="M120.51,120.69 Q128,115.7 135.49,120.69 L182.51,152.01 Q190,157 182.51,161.99 L135.49,193.31 Q128,198.3 120.51,193.31 L73.49,161.99 Q66,157 73.49,152.01 Z" fill="#3d35b0"/>
+  <path d="M120.51,97.69 Q128,92.7 135.49,97.69 L182.51,129.01 Q190,134 182.51,138.99 L135.49,170.31 Q128,175.3 120.51,170.31 L73.49,138.99 Q66,134 73.49,129.01 Z" fill="#5b4de8"/>
+  <path d="M120.51,74.69 Q128,69.7 135.49,74.69 L182.51,106.01 Q190,111 182.51,115.99 L135.49,147.31 Q128,152.3 120.51,147.31 L73.49,115.99 Q66,111 73.49,106.01 Z" fill="#7c72f0"/>
+  <rect x="121" y="63.7" width="14" height="140.6" rx="7" fill="url(#spine-grad)"/>
+  <circle cx="128" cy="63.7" r="9.8" fill="#00cec9" opacity="0.82"/>
+</svg>

@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hummingbird Airlines - Service Directory</title>
+<link rel="icon" href="Hummingbird-Airlines.png" type="image/png">
+<style>
+  :root {
+    /* Aethrix branding */
+    --brand: #6052f0;
+    --brand-hover: #7063f5;
+    --brand-soft: #a29bfe;
+    --teal: #00cec9;
+    --aqua: #22d3b8;
+    --bg-page: #05080f;
+    --bg-surface: #0d1220;
+    --bg-elevated: #111827;
+    --text-1: #e8e6ff;
+    --text-2: #9b96c8;
+    --text-3: #6b6690;
+    --border-subtle: rgba(96, 82, 240, 0.12);
+    --border-default: rgba(96, 82, 240, 0.20);
+    --border-strong: rgba(96, 82, 240, 0.38);
+    --fill-brand: rgba(96, 82, 240, 0.12);
+    --fill-teal: rgba(0, 206, 201, 0.12);
+    --fill-warning: rgba(249, 202, 36, 0.12);
+    --fill-danger: rgba(255, 107, 107, 0.12);
+    --warn: #f9ca24;
+    --danger: #ff6b6b;
+    --font-sans: 'Geist', system-ui, -apple-system, sans-serif;
+    --font-mono: 'Geist Mono', 'Fira Code', ui-monospace, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 0 0 60px; background: var(--bg-page); color: var(--text-1);
+    font: 15px/1.55 var(--font-sans);
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+  header { display: flex; align-items: center; gap: 18px; padding: 28px 0 10px; }
+  header img { width: 64px; height: auto; border-radius: 10px; }
+  h1 { font-size: 26px; margin: 0; letter-spacing: .3px; }
+  .tagline { color: var(--text-2); margin: 2px 0 0; }
+  h2 {
+    font-size: 13px; text-transform: uppercase; letter-spacing: 2px; color: var(--brand-soft);
+    margin: 40px 0 12px; border-bottom: 1px solid var(--border-default); padding-bottom: 8px;
+  }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; }
+  .card {
+    background: var(--bg-surface); border: 1px solid var(--border-default); border-radius: 10px;
+    padding: 16px 18px; transition: border-color .15s;
+  }
+  .card:hover { border-color: var(--border-strong); }
+  .card h3 { margin: 0 0 4px; font-size: 16px; color: var(--text-1); }
+  .card .kind {
+    font-size: 11px; letter-spacing: 1px; color: var(--bg-page); background: var(--brand);
+    border-radius: 4px; padding: 2px 7px; vertical-align: 2px;
+  }
+  .card .kind.soap { background: var(--teal); }
+  .card p { color: var(--text-2); margin: 8px 0 10px; font-size: 13.5px; }
+  .card ul { list-style: none; margin: 0; padding: 0; font-family: var(--font-mono); font-size: 12.5px; }
+  .card li { margin: 3px 0; }
+  a { color: var(--brand-soft); text-decoration: none; word-break: break-all; }
+  a:hover { color: var(--teal); text-decoration: underline; }
+  code, .code {
+    font-family: var(--font-mono); font-size: 12.5px; background: var(--bg-elevated);
+    border: 1px solid var(--border-subtle); border-radius: 5px; padding: 1px 6px;
+  }
+  pre.code { padding: 10px 12px; overflow-x: auto; line-height: 1.5; white-space: pre; }
+  table {
+    width: 100%; border-collapse: collapse; background: var(--bg-surface);
+    border: 1px solid var(--border-default); border-radius: 10px; overflow: hidden;
+  }
+  th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--border-subtle); font-size: 13.5px; }
+  th {
+    background: var(--bg-elevated); color: var(--text-2); font-size: 11.5px;
+    text-transform: uppercase; letter-spacing: 1px;
+  }
+  tr:last-child td { border-bottom: none; }
+  td.mono, .mono { font-family: var(--font-mono); font-size: 12.5px; }
+  .badge {
+    display: inline-block; border-radius: 4px; padding: 1px 8px; font-size: 11.5px;
+    font-family: var(--font-mono); border: 1px solid var(--border-default); color: var(--text-2);
+  }
+  .badge.ok   { color: var(--teal); border-color: rgba(0, 206, 201, 0.30); background: var(--fill-teal); }
+  .badge.warn { color: var(--warn); border-color: rgba(249, 202, 36, 0.30); background: var(--fill-warning); }
+  .badge.err  { color: var(--danger); border-color: rgba(255, 107, 107, 0.30); background: var(--fill-danger); }
+  .refresh {
+    float: right; background: var(--bg-elevated); color: var(--text-1); border: 1px solid var(--border-default);
+    border-radius: 6px; padding: 4px 14px; cursor: pointer; font-size: 13px; font-family: var(--font-sans);
+  }
+  .refresh:hover { border-color: var(--teal); color: var(--teal); }
+  footer {
+    margin-top: 48px; color: var(--text-3); font-size: 12.5px;
+    border-top: 1px solid var(--border-subtle); padding-top: 16px;
+  }
+  footer .legal { max-width: 860px; }
+  footer p { margin: 0 0 8px; }
+  footer .warn { color: var(--warn); background: var(--fill-warning);
+                 border: 1px solid rgba(249, 202, 36, 0.30); border-radius: 6px; padding: 8px 12px; }
+  footer a { color: var(--brand-soft); }
+  footer .meta {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 8px 16px; flex-wrap: wrap;
+    margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--border-subtle);
+  }
+  footer .powered { white-space: nowrap; color: var(--text-2); }
+  footer .powered strong { color: var(--text-1); }
+  footer img { height: 16px; vertical-align: -3px; margin-right: 6px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <img src="Hummingbird-Airlines.png" alt="Hummingbird Airlines">
+    <div>
+      <h1>Hummingbird Airlines &mdash; Service Directory</h1>
+      <p class="tagline">One REST middleware in front of three simulated SOAP&nbsp;1.1 legacy systems. Built for API testing (Aethrix).</p>
+    </div>
+  </header>
+
+  <h2>The four endpoints</h2>
+  <div class="grid">
+    <div class="card">
+      <h3>EAI Gateway <span class="kind">REST</span></h3>
+      <p>Protocol translation only: bookings CRUD, flight info, check-in and baggage drop.
+         No business validation lives here.</p>
+      <ul>
+        <li><a href="/swagger">Swagger UI</a></li>
+        <li><a href="/swagger/v1/swagger.json">OpenAPI document</a></li>
+        <li><a href="/api/v1/flights">/api/v1/flights</a></li>
+        <li><a href="/api/v1/bookings?passport=P0938211">/api/v1/bookings?passport=&hellip;</a></li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Booking System <span class="kind soap">SOAP 1.1</span></h3>
+      <p>Reservations system: CreateBooking, GetBooking, FindBookings, UpdateBooking, CancelBooking.</p>
+      <ul>
+        <li><a href="/soap/booking?wsdl">WSDL</a></li>
+        <li>POST /soap/booking</li>
+        <li>Action: http://hummingbird.airlines/booking/&hellip;</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Flight Management <span class="kind soap">SOAP 1.1</span></h3>
+      <p>Airport flight control (read-only): SearchFlights, GetFlight. Statuses evolve with the clock:
+         scheduled &rarr; check-in open &rarr; boarding &rarr; departed.</p>
+      <ul>
+        <li><a href="/soap/flights?wsdl">WSDL</a></li>
+        <li>POST /soap/flights</li>
+        <li>Action: http://hummingbird.airlines/flights/&hellip;</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Luggage Management <span class="kind soap">SOAP 1.1</span></h3>
+      <p>Airport departure control: one-shot <code>CheckIn</code> with a polymorphic
+         bag array (at most one of each type) and single-bag <code>RegisterBaggage</code>;
+         overweight accepted with a legacy warning.</p>
+      <ul>
+        <li><a href="/soap/luggage?wsdl">WSDL</a></li>
+        <li>POST /soap/luggage</li>
+        <li>Action: http://hummingbird.airlines/luggage/&hellip;</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>Hot flights <span style="float:right"><button class="refresh" onclick="refresh()">Refresh</button></span></h2>
+  <table id="flights">
+    <thead><tr><th>Flight</th><th>Route</th><th>Departure (UTC)</th><th>Departs in</th><th>Status</th><th>Gate</th></tr></thead>
+    <tbody><tr><td colspan="6" class="mono">loading&hellip;</td></tr></tbody>
+  </table>
+
+  <h2>Demo bookings (deterministic &middot; reset on every restart)</h2>
+  <table id="bookings">
+    <thead><tr><th>Ref</th><th>Passenger</th><th>Cabin</th><th>Frozen scenario</th><th>Live state</th></tr></thead>
+    <tbody>
+      <tr data-ref="GZT001"><td class="mono">GZT001</td><td>John Doe</td><td>Economy</td>
+          <td>Far-future flight: happy-path check-in and baggage (limits 23 / 8 kg)</td><td class="state mono">&hellip;</td></tr>
+      <tr data-ref="QWX452"><td class="mono">QWX452</td><td>Alice Martin</td><td>Business</td>
+          <td>Check-in open (~45 min): overweight tests, checked limit 30 kg</td><td class="state mono">&hellip;</td></tr>
+      <tr data-ref="LMN789"><td class="mono">LMN789</td><td>Bob Chen</td><td>Economy</td>
+          <td>Departs in ~29 min: check-in triggers CHECKIN_CLOSED (409)</td><td class="state mono">&hellip;</td></tr>
+      <tr data-ref="PRS205"><td class="mono">PRS205</td><td>Carol Dupont</td><td>First</td>
+          <td>Already checked in: re-check-in triggers ALREADY_CHECKED_IN; bag drop ready</td><td class="state mono">&hellip;</td></tr>
+      <tr data-ref="TRV310"><td class="mono">TRV310</td><td>David Wang</td><td>Economy</td>
+          <td>Generic target for PUT / DELETE tests</td><td class="state mono">&hellip;</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Business rules quick reference</h2>
+  <table>
+    <thead><tr><th>Situation</th><th>Backend behaviour</th><th>Middleware response</th></tr></thead>
+    <tbody>
+      <tr><td>Check-in &lt; 30 min before departure</td><td class="mono">fault CHECKIN_CLOSED</td><td class="mono">409 problem+json</td></tr>
+      <tr><td>Checked bag over allowance (First/Business 30 kg, Economy 23 kg)</td><td>accepted + legacy warning</td><td class="mono">201 + warnings[]</td></tr>
+      <tr><td>Carry-on over allowance (First/Business 10 kg, Economy 8 kg)</td><td>accepted + legacy warning</td><td class="mono">201 + warnings[]</td></tr>
+      <tr><td>More than one bag of the same type per passenger</td><td class="mono">fault BAGGAGE_TYPE_LIMIT</td><td class="mono">409</td></tr>
+      <tr><td>Baggage before check-in</td><td class="mono">fault CHECKIN_REQUIRED</td><td class="mono">409</td></tr>
+      <tr><td>Unknown booking / flight</td><td class="mono">BOOKING_NOT_FOUND / FLIGHT_NOT_FOUND</td><td class="mono">404</td></tr>
+      <tr><td>Cancelled or departed flight</td><td class="mono">FLIGHT_CANCELLED / FLIGHT_DEPARTED</td><td class="mono">409</td></tr>
+      <tr><td>Bookings table full (&gt; 50)</td><td colspan="2">oldest record evicted (FIFO), no persistence</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Warning translation example</h2>
+<pre class="code">legacy in : W|BAGGAGE_WEIGHT|checked|24.9|23.0
+JSON out : {
+  "code": "CHECKED_BAGGAGE_OVERWEIGHT", "category": "baggageWeight",
+  "message": "The checked bag weighs 24.9 kg which exceeds the allowance of 23 kg.",
+  "actualKg": 24.9, "limitKg": 23,
+  "legacyMessage": "W|BAGGAGE_WEIGHT|checked|24.9|23.0"
+}</pre>
+
+  <h2>Failure injection (chaos header)</h2>
+<pre class="code">curl -H "X-HB-Simulate: timeout=12"   https://hummingbird-airline.azurewebsites.net/api/v1/flights/HB903   # -> 504 LEGACY_TIMEOUT
+curl -H "X-HB-Simulate: fault"        https://hummingbird-airline.azurewebsites.net/api/v1/flights/HB903   # -> 502 INTERNAL_ERROR
+curl -H "X-HB-Simulate: unavailable"  https://hummingbird-airline.azurewebsites.net/api/v1/flights/HB903   # -> 502 LEGACY_UNAVAILABLE</pre>
+  <p class="tagline">The header also works when calling the SOAP endpoints directly, and is relayed by the middleware to the backends.</p>
+
+  <h2>Abuse protection</h2>
+  <table id="protection">
+    <thead><tr><th>Scope</th><th>Limit</th><th>Note</th></tr></thead>
+    <tbody><tr><td colspan="3" class="mono">loading&hellip;</td></tr></tbody>
+  </table>
+
+  <footer>
+    <div class="legal">
+      <p>
+        &copy; 2018&ndash;2026 Huaxing YUAN &middot; Released under the
+        <a href="https://opensource.org/licenses/MIT">MIT License</a>.
+        Hummingbird Airlines is a fictional airline for software testing demonstrations.
+        State is in-memory only and resets on restart.
+      </p>
+      <p class="warn">
+        This is a free public test server intended solely for understanding, learning,
+        practice and API testing. Abuse, large-scale load/attack traffic or any illegal
+        use is prohibited; the operator reserves the right to block offenders without notice.
+      </p>
+      <div class="meta">
+        <span class="tm">Aethrix&reg; is a registered trademark of Huaxing YUAN (EPO).</span>
+        <span class="powered"><img src="img/aethrix-icon.svg" alt=""> powered by <strong>Aethrix</strong></span>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script>
+"use strict";
+
+function el(tag, cls, text) {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (text !== undefined) e.textContent = text;
+  return e;
+}
+
+function badge(text, cls) { return el("span", "badge " + (cls || ""), text); }
+
+async function fetchJson(url) {
+  const r = await fetch(url);
+  if (!r.ok) throw new Error(String(r.status));
+  return r.json();
+}
+
+const FLIGHT_BADGES = {
+  Scheduled:  ["scheduled", ""],
+  CheckInOpen:["check-in open", "ok"],
+  Boarding:   ["boarding", "warn"],
+  Departed:   ["departed", "err"],
+  Cancelled:  ["cancelled", "err"]
+};
+
+async function loadFlight(nr) {
+  try {
+    const f = await fetchJson("/api/v1/flights/" + nr);
+    const mins = Math.round((new Date(f.scheduledDepartureUtc) - Date.now()) / 60000);
+    const departsIn = mins > 0 ? mins + " min" : "-" + (-mins) + " min (gone)";
+    const meta = FLIGHT_BADGES[f.status] || [f.status, ""];
+    return { cells: [
+      el("span","mono", f.flightNumber),
+      el("span","mono", f.from.code + " \u2192 " + f.to.code),
+      el("span","mono", new Date(f.scheduledDepartureUtc).toISOString().replace("T"," ").slice(0,19)),
+      el("span","mono", departsIn),
+      badge(meta[0], meta[1]),
+      el("span","mono", f.gate)
+    ]};
+  } catch {
+    return { cells: [el("span","mono",nr), el("td","mono","-"), el("td","mono","-"),
+                     el("td","mono","-"), badge("unavailable","err"), el("td","mono","-")] };
+  }
+}
+
+async function loadBooking(ref) {
+  const cell = document.querySelector('#bookings tr[data-ref="' + ref + '"] .state');
+  try {
+    const b = await fetchJson("/api/v1/bookings/" + ref);
+    cell.replaceChildren(badge(b.isCheckedIn ? "checked-in" : "confirmed", b.isCheckedIn ? "warn" : "ok"),
+                         el("span","mono", " " + b.flightNumber + " / seat " + (b.seat || "-")));
+  } catch (e) {
+    cell.replaceChildren(badge("evicted / not found", "err"));
+  }
+}
+
+async function loadProtection() {
+  try {
+    const p = await fetchJson("/api/v1/_protection");
+    const tbody = document.querySelector("#protection tbody");
+    tbody.replaceChildren();
+    const rows = [
+      ["Per IP - REST /api/v1",  p.apiRequestsPerMinute  + " requests / minute", "fixed window"],
+      ["Per IP - SOAP /soap/*",  p.soapRequestsPerMinute + " requests / minute", "fixed window"],
+      ["Per IP - other pages",   p.otherRequestsPerMinute+ " requests / minute", "fixed window"],
+      ["Per IP - concurrency",   p.maxConcurrentPerIp + " parallel requests", "queue-less; excess rejected"],
+      ["Server wide",            p.globalRequestsPerMinute + " requests / minute", "absolute ceiling"],
+      ["Request body size",      Math.round(p.maxRequestBodySizeBytes/1024) + " KB", "Kestrel cap"],
+      ["Internal loopback calls","", "middleware \u2192 backend traffic is exempt"]
+    ];
+    for (const r of rows) {
+      const tr = el("tr");
+      tr.append(el("td",null,r[0]), el("td","mono",r[1] || "-"), el("td","mono",r[2]));
+      tbody.append(tr);
+    }
+  } catch { /* keep placeholder */ }
+}
+
+async function refresh() {
+  const flights = ["HB900","HB901","HB902","HB903","HB904","HB905","HB906","HB907"];
+  const tbody = document.querySelector("#flights tbody");
+  tbody.replaceChildren(el("td",{colspan:"6"},""));
+  tbody.deleteRow(0);
+  for (const nr of flights) {
+    const res = await loadFlight(nr);
+    const tr = el("tr");
+    res.cells.forEach(c => { const td = el("td"); td.append(c); tr.append(td); });
+    tbody.append(tr);
+  }
+  for (const tr of document.querySelectorAll("#bookings tr[data-ref]")) {
+    loadBooking(tr.dataset.ref);
+  }
+}
+
+loadProtection();
+refresh();
+setInterval(refresh, 20000);
+</script>
+</body>
+</html>
