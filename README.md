@@ -159,7 +159,9 @@ test service for bulk attacks or load testing. Configured under `Protection` in
 3. **Polymorphism**: baggage bodies are discriminated unions -
    `{"type":"checked","weightKg":23}` or `{"type":"carryOn","weightKg":8}` - implemented with
    `System.Text.Json` polymorphism on the REST side and `[KnownType]`/`xsi:type` on the SOAP
-   side. OpenAPI exposes it as a `oneOf` schema.
+   side. The REST reader is tolerant: it also accepts the Newtonsoft-style
+   `"$type":"...CheckedBaggage, ..."` discriminator emitted by generated clients (e.g. Aethrix).
+   OpenAPI exposes the union as `oneOf` plus a `discriminator { propertyName: "type" }`.
 
 ### Failure injection (chaos header)
 

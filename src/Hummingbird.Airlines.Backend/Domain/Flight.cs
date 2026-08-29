@@ -128,9 +128,7 @@ public class Flight
 /// </summary>
 [KnownType(typeof(CheckedBaggage))]
 [KnownType(typeof(CarryOnBaggage))]
-[JsonPolymorphic(TypeDiscriminatorPropertyName = "type", UnknownDerivedTypeHandling = JsonUnknownDerivedTypeHandling.FailSerialization)]
-[JsonDerivedType(typeof(CheckedBaggage), "checked")]
-[JsonDerivedType(typeof(CarryOnBaggage), "carryOn")]
+[JsonConverter(typeof(BaggageJsonConverter))]
 [DataContract(Name = "Baggage")]
 public abstract class Baggage
 {

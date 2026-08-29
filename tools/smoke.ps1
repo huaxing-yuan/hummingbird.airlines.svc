@@ -355,24 +355,31 @@ foreach ($endpoint in @("booking", "flights", "luggage")) {
 
 Section "OpenAPI exposes the baggage polymorphic hierarchy (item + array)"
 $swagger = Invoke-RestMethod "$BaseUrl/swagger/v1/swagger.json"
-$baggageRequest = $swagger.paths.'/api/v1/bookings/{reference}/baggage'.post.requestBody.content.'application/json'.schema
-# check-in uses a wrapper type RestCheckInRequest -> resolve $ref if present
-$checkInSchema = $swagger.paths.'/api/v1/bookings/{reference}/check-in'.post.requestBody.content.'application/json'.schema
-if ($checkInSchema.'$ref') {
-    $refName = $checkInSchema.'$ref' -replace '^#/components/schemas/', ''
-    $checkInSchema = $swagger.components.schemas.$refName
+function Resolve-Schema {
+    param($Schema, $Swagger)
+    if ($Schema.'$ref') {
+        $name = $Schema.'$ref' -replace '^#/components/schemas/', ''
+        return $Swagger.components.schemas.$name
+    }
+    return $Schema
 }
-$checkInBags = $checkInSchema.properties.bags
+$baggageRequest = Resolve-Schema ($swagger.paths.'/api/v1/bookings/{reference}/baggage'.post.requestBody.content.'application/json'.schema) $swagger
+$checkInSchema = Resolve-Schema ($swagger.paths.'/api/v1/bookings/{reference}/check-in'.post.requestBody.content.'application/json'.schema) $swagger
+$checkInItems = Resolve-Schema $checkInSchema.properties.bags.items $swagger
 if ($baggageRequest.oneOf) {
     $script:pass++
     $refs = $baggageRequest.oneOf.'$ref' -join ", "
     Write-Host "PASS baggage single-item schema is polymorphic oneOf ($refs)" -ForegroundColor Green
 } else { $script:fail++; Write-Host "FAIL baggage single-item schema not polymorphic" -ForegroundColor Red }
-if ($checkInBags -and $checkInBags.items.oneOf) {
+if ($checkInItems.oneOf) {
     $script:pass++
-    $refs2 = $checkInBags.items.oneOf.'$ref' -join ", "
+    $refs2 = $checkInItems.oneOf.'$ref' -join ", "
     Write-Host "PASS check-in bag-array items are polymorphic oneOf ($refs2)" -ForegroundColor Green
 } else { $script:fail++; Write-Host "FAIL check-in polymorphic array not exposed" -ForegroundColor Red }
+if ($baggageRequest.discriminator -and $baggageRequest.discriminator.propertyName -eq 'type') {
+    $script:pass++
+    Write-Host "PASS baggage discriminator declares propertyName 'type'" -ForegroundColor Green
+} else { $script:fail++; Write-Host "FAIL baggage discriminator missing" -ForegroundColor Red }
 
 # ---------------------------------------------------------------------------
 if (-not $SkipEvictionTest) {

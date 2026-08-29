@@ -1,6 +1,7 @@
 using System.Net;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Hummingbird.Airlines.Backend.Domain;
 using Hummingbird.Airlines.Backend.Services;
 using Hummingbird.Airlines.Backend.Storage;
 using Hummingbird.Airlines.Middleware.Api;
@@ -124,8 +125,9 @@ builder.Services.AddSwaggerGen(options =>
             """,
     });
 
-    // Emit oneOf/discriminator schemas for the STJ polymorphic baggage hierarchy.
-    options.UseOneOfForPolymorphism();
+    // Baggage is polymorphic via a custom tolerant converter; Swashbuckle cannot see the
+    // derived types without [JsonPolymorphic], so a schema filter builds the oneOf + discriminator.
+    options.SchemaFilter<PolymorphicBaggageSchemaFilter>();
 
     // Feed <summary>/<example> XML comments into description/example metadata so
     // code generators (Aethrix object tree) can surface hints to the user.
