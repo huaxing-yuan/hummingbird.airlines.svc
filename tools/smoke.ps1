@@ -380,6 +380,15 @@ if ($baggageRequest.discriminator -and $baggageRequest.discriminator.propertyNam
     $script:pass++
     Write-Host "PASS baggage discriminator declares propertyName 'type'" -ForegroundColor Green
 } else { $script:fail++; Write-Host "FAIL baggage discriminator missing" -ForegroundColor Red }
+if ($baggageRequest.discriminator.mapping -and $baggageRequest.discriminator.mapping.checked -and $baggageRequest.discriminator.mapping.carryOn) {
+    $script:pass++
+    Write-Host "PASS baggage discriminator mapping checked/carryOn present" -ForegroundColor Green
+} else { $script:fail++; Write-Host "FAIL baggage discriminator mapping missing" -ForegroundColor Red }
+if ($swagger.components.schemas.CheckedBaggage.properties.type.enum[0] -eq 'checked' -and
+    $swagger.components.schemas.CarryOnBaggage.properties.type.enum[0] -eq 'carryOn') {
+    $script:pass++
+    Write-Host "PASS derived schemas declare single-value type enum" -ForegroundColor Green
+} else { $script:fail++; Write-Host "FAIL derived type enums missing" -ForegroundColor Red }
 
 # ---------------------------------------------------------------------------
 if (-not $SkipEvictionTest) {
