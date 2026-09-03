@@ -77,3 +77,19 @@ public sealed class BookingListResponse
     /// <example>2</example>
     public int Count { get; init; }
 }
+
+/// <summary>Result of POST /api/v1/admin/reset: all in-memory demo data restored to fresh state.</summary>
+public sealed class ResetResult
+{
+    /// <summary>Always true when the reset completed.</summary>
+    /// <example>true</example>
+    public bool Reset { get; init; }
+
+    /// <summary>UTC instant the reset was applied.</summary>
+    /// <example>2026-09-03T12:00:00Z</example>
+    public DateTime ResetAtUtc { get; init; }
+
+    /// <summary>Booking references restored by reseeding (the frozen demo set).</summary>
+    /// <example>["GZT001", "QWX452", "LMN789", "PRS205", "TRV310"]</example>
+    public IReadOnlyList<string> DemoBookings { get; init; } = [];
+}

@@ -87,7 +87,7 @@ public interface IBookingSystemService
 {
     [System.ServiceModel.OperationContract(Action = "http://hummingbird.airlines/booking/CreateBooking", ReplyAction = "http://hummingbird.airlines/booking/CreateBookingResponse")]
     [System.ServiceModel.FaultContract(typeof(ServiceFault))]
-    Booking CreateBooking(CreateBookingRequest request);
+    Booking CreateBooking(FlightDesignator flight, CabinClass cabinClass, Passenger passenger);
 
     [System.ServiceModel.OperationContract(Action = "http://hummingbird.airlines/booking/GetBooking", ReplyAction = "http://hummingbird.airlines/booking/GetBookingResponse")]
     [System.ServiceModel.FaultContract(typeof(ServiceFault))]
@@ -99,11 +99,18 @@ public interface IBookingSystemService
 
     [System.ServiceModel.OperationContract(Action = "http://hummingbird.airlines/booking/UpdateBooking", ReplyAction = "http://hummingbird.airlines/booking/UpdateBookingResponse")]
     [System.ServiceModel.FaultContract(typeof(ServiceFault))]
-    Booking UpdateBooking(string bookingRef, UpdateBookingRequest request);
+    Booking UpdateBooking(string bookingRef, CabinClass cabinClass, Passenger passenger);
 
     [System.ServiceModel.OperationContract(Action = "http://hummingbird.airlines/booking/CancelBooking", ReplyAction = "http://hummingbird.airlines/booking/CancelBookingResponse")]
     [System.ServiceModel.FaultContract(typeof(ServiceFault))]
     void CancelBooking(string bookingRef);
+
+    /// <summary>
+    /// Administrative reset: drops every booking, replays the frozen demo seeds and restarts
+    /// all deterministic counters. Global operation (no session isolation); bypasses chaos drills.
+    /// </summary>
+    [System.ServiceModel.OperationContract(Action = "http://hummingbird.airlines/booking/ResetDemoData", ReplyAction = "http://hummingbird.airlines/booking/ResetDemoDataResponse")]
+    BookingList ResetDemoData();
 }
 
 // ---------------------------------------------------------------------------
@@ -135,21 +142,6 @@ public interface IFlightManagementService
 // Luggage management (airport departure control: check-in + baggage drop)
 // ---------------------------------------------------------------------------
 
-/// <summary>Body of POST /api/v1/bookings/{ref}/baggage: register ONE bag at the bag drop.
-/// The luggage field is polymorphic - {"type":"checked",...} or {"type":"carryOn",...}.</summary>
-[DataContract(Name = "BaggageRegistrationRequest")]
-public class BaggageRegistrationRequest
-{
-    /// <summary>Reference of the booking the bag belongs to; must already be checked in.</summary>
-    /// <example>GZT001</example>
-    [DataMember(Order = 1)]
-    public string BookingRef { get; set; } = string.Empty;
-
-    /// <summary>The bag to register: checked or carry-on, weight between 0 and 100 kg.</summary>
-    [DataMember(Order = 2)]
-    public Baggage Luggage { get; set; } = default!;
-}
-
 /// <summary>
 /// Soft-failure reply of a baggage registration. Business violations that are NOT fatal
 /// (overweight) keep Success=true and are reported as legacy warning strings, translated
@@ -174,24 +166,6 @@ public class BaggageRegistrationReply
 
     /// <summary>All bags currently registered on the booking, newest last.</summary>
     [DataMember(Order = 4)]
-    public List<Baggage> Bags { get; set; } = [];
-}
-
-/// <summary>
-/// One-shot check-in request. Bags is a polymorphic array: each element carries a
-/// type discriminator {"type":"checked",...} or {"type":"carryOn",...}.
-/// The backend validates the whole batch atomically; at most one bag of each kind.
-/// </summary>
-[DataContract(Name = "CheckInRequest")]
-public class CheckInRequest
-{
-    /// <summary>Booking reference to check in.</summary>
-    /// <example>GZT001</example>
-    [DataMember(Order = 1)]
-    public string BookingRef { get; set; } = string.Empty;
-
-    /// <summary>Polymorphic bag array registered together with the check-in; may be empty.</summary>
-    [DataMember(Order = 2)]
     public List<Baggage> Bags { get; set; } = [];
 }
 
@@ -254,12 +228,16 @@ public interface ILuggageManagementService
     /// <summary>
     /// One-shot check-in: validates the booking, assigns seat/gate/sequence and
     /// atomically registers the optional polymorphic bag array.
+    /// Request parameters are flat (DCS wrapped style): bookingRef + bags (ArrayOfBaggage).
     /// </summary>
     [System.ServiceModel.OperationContract(Action = "http://hummingbird.airlines/luggage/CheckIn", ReplyAction = "http://hummingbird.airlines/luggage/CheckInResponse")]
     [System.ServiceModel.FaultContract(typeof(ServiceFault))]
-    CheckInResult CheckIn(CheckInRequest request);
+    CheckInResult CheckIn(string bookingRef, List<Baggage> bags);
 
+    /// <summary>
+    /// Register one bag: flat parameters bookingRef + luggage (with xsi:type).
+    /// </summary>
     [System.ServiceModel.OperationContract(Action = "http://hummingbird.airlines/luggage/RegisterBaggage", ReplyAction = "http://hummingbird.airlines/luggage/RegisterBaggageResponse")]
     [System.ServiceModel.FaultContract(typeof(ServiceFault))]
-    BaggageRegistrationReply RegisterBaggage(BaggageRegistrationRequest request);
+    BaggageRegistrationReply RegisterBaggage(string bookingRef, Baggage luggage);
 }

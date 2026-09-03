@@ -218,6 +218,16 @@ curl -H "X-HB-Simulate: fault"        https://hummingbird-airline.azurewebsites.
 curl -H "X-HB-Simulate: unavailable"  https://hummingbird-airline.azurewebsites.net/api/v1/flights/HB903   # -> 502 LEGACY_UNAVAILABLE</pre>
   <p class="tagline">The header also works when calling the SOAP endpoints directly, and is relayed by the middleware to the backends.</p>
 
+  <h2>Reset demo data</h2>
+  <p class="tagline">
+    <code>POST /api/v1/admin/reset</code> drops every booking, replays the five frozen demo
+    seeds and restarts the deterministic counters &mdash; repeat a scenario without restarting
+    the system. Global operation (no sessions, no concurrency guarantees); rate limits apply.
+  </p>
+<pre class="code">curl -X POST https://hummingbird-airline.azurewebsites.net/api/v1/admin/reset</pre>
+  <p><button class="refresh" style="float:none" onclick="resetDemo()">Reset demo data now</button>
+     <span id="resetResult" class="mono"></span></p>
+
   <h2>Abuse protection</h2>
   <table id="protection">
     <thead><tr><th>Scope</th><th>Limit</th><th>Note</th></tr></thead>
@@ -337,6 +347,21 @@ async function refresh() {
   }
   for (const tr of document.querySelectorAll("#bookings tr[data-ref]")) {
     loadBooking(tr.dataset.ref);
+  }
+}
+
+async function resetDemo() {
+  const out = document.querySelector("#resetResult");
+  out.textContent = "resetting…";
+  try {
+    const r = await fetch("/api/v1/admin/reset", { method: "POST" });
+    const data = await r.json();
+    out.textContent = r.ok
+      ? "done at " + data.resetAtUtc + " (" + data.demoBookings.join(", ") + ")"
+      : "failed: HTTP " + r.status;
+    refresh();
+  } catch (e) {
+    out.textContent = "failed: " + e;
   }
 }
 

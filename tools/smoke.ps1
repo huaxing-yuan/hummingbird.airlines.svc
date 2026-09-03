@@ -243,10 +243,8 @@ $envelope = @"
   <soapenv:Header/>
   <soapenv:Body>
     <lug:CheckIn>
-      <request xmlns:d4p1="http://schemas.datacontract.org/2004/07/Hummingbird.Airlines.Backend.Services" xmlns:b="http://schemas.datacontract.org/2004/07/Hummingbird.Airlines.Backend.Domain" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-        <d4p1:BookingRef>QWX452</d4p1:BookingRef>
-        <d4p1:Bags/>
-      </request>
+      <lug:bookingRef>QWX452</lug:bookingRef>
+      <lug:bags/>
     </lug:CheckIn>
   </soapenv:Body>
 </soapenv:Envelope>
@@ -305,13 +303,11 @@ $soapPolyEnvelope = @"
   <soapenv:Header/>
   <soapenv:Body>
     <lug:CheckIn>
-      <request xmlns:d4p1="http://schemas.datacontract.org/2004/07/Hummingbird.Airlines.Backend.Services" xmlns:b="http://schemas.datacontract.org/2004/07/Hummingbird.Airlines.Backend.Domain" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-        <d4p1:BookingRef>$soapPolyRef</d4p1:BookingRef>
-        <d4p1:Bags>
-          <b:Baggage i:type="b:CheckedBaggage"><b:WeightKg>22</b:WeightKg><b:Color>navy</b:Color><b:TagId></b:TagId><b:LengthCm>70</b:LengthCm><b:WidthCm>45</b:WidthCm><b:HeightCm>28</b:HeightCm><b:Fragile>false</b:Fragile></b:Baggage>
-          <b:Baggage i:type="b:CarryOnBaggage"><b:WeightKg>7</b:WeightKg><b:Color>grey</b:Color><b:TagId></b:TagId><b:HasLaptop>true</b:HasLaptop><b:FitsUnderSeat>false</b:FitsUnderSeat></b:Baggage>
-        </d4p1:Bags>
-      </request>
+      <lug:bookingRef>$soapPolyRef</lug:bookingRef>
+      <lug:bags xmlns:b="http://schemas.datacontract.org/2004/07/Hummingbird.Airlines.Backend.Domain" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+        <b:Baggage i:type="b:CheckedBaggage"><b:WeightKg>22</b:WeightKg><b:Color>navy</b:Color><b:TagId></b:TagId><b:LengthCm>70</b:LengthCm><b:WidthCm>45</b:WidthCm><b:HeightCm>28</b:HeightCm><b:Fragile>false</b:Fragile></b:Baggage>
+        <b:Baggage i:type="b:CarryOnBaggage"><b:WeightKg>7</b:WeightKg><b:Color>grey</b:Color><b:TagId></b:TagId><b:HasLaptop>true</b:HasLaptop><b:FitsUnderSeat>false</b:FitsUnderSeat></b:Baggage>
+      </lug:bags>
     </lug:CheckIn>
   </soapenv:Body>
 </soapenv:Envelope>
@@ -389,6 +385,41 @@ if ($swagger.components.schemas.CheckedBaggage.properties.type.enum[0] -eq 'chec
     $script:pass++
     Write-Host "PASS derived schemas declare single-value type enum" -ForegroundColor Green
 } else { $script:fail++; Write-Host "FAIL derived type enums missing" -ForegroundColor Red }
+
+# ---------------------------------------------------------------------------
+Section "Reset restores fresh state (POST /api/v1/admin/reset)"
+$resetProbe = Invoke-Api Post "$BaseUrl/api/v1/bookings" @"
+{"flight":{"carrier":"$carrier","number":$number},"cabinClass":"economy","passenger":{"firstName":"Reset","lastName":"Probe","passport":"RESET01"}}
+"@
+Show-Result $resetProbe 201
+$resetProbeRef = ($resetProbe.Content | ConvertFrom-Json).bookingRef
+$reset = Invoke-Api Post "$BaseUrl/api/v1/admin/reset"
+Show-Result $reset 200
+$resetBody = $reset.Content | ConvertFrom-Json
+if ($resetBody.reset -eq $true -and $resetBody.demoBookings.Count -eq 5 -and $resetBody.demoBookings -contains "GZT001") {
+    $script:pass++
+    Write-Host "PASS reset returned 5 demo refs" -ForegroundColor Green
+}
+else {
+    $script:fail++
+    Write-Host "FAIL reset body unexpected" -ForegroundColor Red
+    Write-Host $reset.Content -ForegroundColor DarkGray
+}
+Show-Result (Invoke-Api Get "$BaseUrl/api/v1/bookings/$resetProbeRef") 404 "BOOKING_NOT_FOUND"
+Show-Result (Invoke-Api Get "$BaseUrl/api/v1/bookings/GZT001") 200
+$afterReset = Invoke-Api Post "$BaseUrl/api/v1/bookings" @"
+{"flight":{"carrier":"$carrier","number":$number},"cabinClass":"economy","passenger":{"firstName":"Reset","lastName":"Probe2","passport":"RESET02"}}
+"@
+Show-Result $afterReset 201
+if (($afterReset.Content | ConvertFrom-Json).bookingRef -eq "T00001") {
+    $script:pass++
+    Write-Host "PASS ref counter restarted at T00001" -ForegroundColor Green
+}
+else {
+    $script:fail++
+    Write-Host "FAIL ref counter did not restart" -ForegroundColor Red
+    Write-Host $afterReset.Content -ForegroundColor DarkGray
+}
 
 # ---------------------------------------------------------------------------
 if (-not $SkipEvictionTest) {

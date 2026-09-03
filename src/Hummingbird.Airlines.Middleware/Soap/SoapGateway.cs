@@ -66,7 +66,7 @@ public sealed class SoapGateway
     // ----- Booking system -----
 
     public Booking CreateBooking(CreateBookingRequest request) =>
-        Exec(_bookingFactory, "booking", channel => channel.CreateBooking(request));
+        Exec(_bookingFactory, "booking", channel => channel.CreateBooking(request.Flight, request.CabinClass, request.Passenger));
 
     public Booking GetBooking(string bookingRef) =>
         Exec(_bookingFactory, "booking", channel => channel.GetBooking(bookingRef));
@@ -75,7 +75,7 @@ public sealed class SoapGateway
         Exec(_bookingFactory, "booking", channel => channel.FindBookings(passport).Items);
 
     public Booking UpdateBooking(string bookingRef, UpdateBookingRequest request) =>
-        Exec(_bookingFactory, "booking", channel => channel.UpdateBooking(bookingRef, request));
+        Exec(_bookingFactory, "booking", channel => channel.UpdateBooking(bookingRef, request.CabinClass, request.Passenger));
 
     public void CancelBooking(string bookingRef) =>
         Exec(_bookingFactory, "booking", channel =>
@@ -83,6 +83,9 @@ public sealed class SoapGateway
             channel.CancelBooking(bookingRef);
             return true;
         });
+
+    public BookingList ResetDemoData() =>
+        Exec(_bookingFactory, "booking", channel => channel.ResetDemoData());
 
     // ----- Flight management -----
 
@@ -94,11 +97,11 @@ public sealed class SoapGateway
 
     // ----- Luggage management -----
 
-    public CheckInResult CheckIn(CheckInRequest request) =>
-        Exec(_luggageFactory, "luggage", channel => channel.CheckIn(request));
+    public CheckInResult CheckIn(string bookingRef, List<Baggage> bags) =>
+        Exec(_luggageFactory, "luggage", channel => channel.CheckIn(bookingRef, bags ?? []));
 
-    public BaggageRegistrationReply RegisterBaggage(BaggageRegistrationRequest request) =>
-        Exec(_luggageFactory, "luggage", channel => channel.RegisterBaggage(request));
+    public BaggageRegistrationReply RegisterBaggage(string bookingRef, Baggage luggage) =>
+        Exec(_luggageFactory, "luggage", channel => channel.RegisterBaggage(bookingRef, luggage));
 
     // ----- Plumbing -----
 

@@ -14,24 +14,24 @@ public class BookingSystemService : IBookingSystemService
         _bookings = bookings;
     }
 
-    public Booking CreateBooking(CreateBookingRequest request)
+    public Booking CreateBooking(FlightDesignator flightRequest, CabinClass cabinClass, Passenger passenger)
     {
         Chaos.Apply();
 
-        if (request?.Flight is null)
+        if (flightRequest is null)
         {
             throw Faults.Create(FaultCodes.InvalidRequest, "Flight designator is required");
         }
 
-        if (request.Passenger is null
-            || string.IsNullOrWhiteSpace(request.Passenger.FirstName)
-            || string.IsNullOrWhiteSpace(request.Passenger.LastName)
-            || string.IsNullOrWhiteSpace(request.Passenger.Passport))
+        if (passenger is null
+            || string.IsNullOrWhiteSpace(passenger.FirstName)
+            || string.IsNullOrWhiteSpace(passenger.LastName)
+            || string.IsNullOrWhiteSpace(passenger.Passport))
         {
             throw Faults.Create(FaultCodes.InvalidRequest, "Passenger FirstName, LastName and Passport are required");
         }
 
-        var flightNumber = $"{request.Flight.Carrier.ToString().ToUpperInvariant()}{request.Flight.Number}";
+        var flightNumber = $"{flightRequest.Carrier.ToString().ToUpperInvariant()}{flightRequest.Number}";
         var flight = _flights.GetByNumber(flightNumber);
         if (flight is null)
         {
@@ -51,10 +51,10 @@ public class BookingSystemService : IBookingSystemService
         var booking = new Booking
         {
             BookingRef = _bookings.GenerateRef(),
-            Passenger = request.Passenger,
+            Passenger = passenger,
             FlightNumber = flight.FlightNumber,
             Flight = new FlightDesignator { Carrier = flight.Designator.Carrier, Number = flight.Designator.Number },
-            CabinClass = request.CabinClass,
+            CabinClass = cabinClass,
             CreatedAtUtc = DateTime.UtcNow,
         };
 
@@ -88,19 +88,14 @@ public class BookingSystemService : IBookingSystemService
         return new BookingList { Items = [.. items] };
     }
 
-    public Booking UpdateBooking(string bookingRef, UpdateBookingRequest request)
+    public Booking UpdateBooking(string bookingRef, CabinClass cabinClass, Passenger passenger)
     {
         Chaos.Apply();
 
-        if (request is null)
-        {
-            throw Faults.Create(FaultCodes.InvalidRequest, "Request body is required");
-        }
-
-        if (request.Passenger is null
-            || string.IsNullOrWhiteSpace(request.Passenger.FirstName)
-            || string.IsNullOrWhiteSpace(request.Passenger.LastName)
-            || string.IsNullOrWhiteSpace(request.Passenger.Passport))
+        if (passenger is null
+            || string.IsNullOrWhiteSpace(passenger.FirstName)
+            || string.IsNullOrWhiteSpace(passenger.LastName)
+            || string.IsNullOrWhiteSpace(passenger.Passport))
         {
             throw Faults.Create(FaultCodes.InvalidRequest, "Passenger FirstName, LastName and Passport are required");
         }
@@ -112,8 +107,8 @@ public class BookingSystemService : IBookingSystemService
                 throw Faults.Create(FaultCodes.AlreadyCheckedIn, $"Booking {booking.BookingRef} is already checked in and can no longer be modified");
             }
 
-            booking.CabinClass = request.CabinClass;
-            booking.Passenger = request.Passenger;
+            booking.CabinClass = cabinClass;
+            booking.Passenger = passenger;
         });
 
         return Enrich(updated
@@ -128,6 +123,14 @@ public class BookingSystemService : IBookingSystemService
         {
             throw Faults.Create(FaultCodes.BookingNotFound, $"No booking found for reference '{bookingRef}'");
         }
+    }
+
+    public BookingList ResetDemoData()
+    {
+        // Deliberately no Chaos.Apply(): reset must always succeed, even in failure drills.
+        _bookings.Reset();
+        LuggageManagementService.ResetSequences();
+        return new BookingList { Items = [.. _bookings.GetAll().Select(Enrich)] };
     }
 
     private Booking Enrich(Booking booking)

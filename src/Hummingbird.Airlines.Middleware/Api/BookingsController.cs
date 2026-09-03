@@ -129,11 +129,7 @@ public class BookingsController(SoapGateway gateway) : ControllerBase
         [FromBody(EmptyBodyBehavior = Microsoft.AspNetCore.Mvc.ModelBinding.EmptyBodyBehavior.Allow)]
         RestCheckInRequest? body)
     {
-        var result = gateway.CheckIn(new CheckInRequest
-        {
-            BookingRef = reference,
-            Bags = body?.Bags ?? [],
-        });
+        var result = gateway.CheckIn(reference, body?.Bags ?? []);
 
         FlightDesignator flightDesignator;
         try
@@ -194,11 +190,7 @@ public class BookingsController(SoapGateway gateway) : ControllerBase
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
     public ActionResult<BaggageRegistrationResponse> RegisterBaggage(string reference, [FromBody] Baggage luggage)
     {
-        var reply = gateway.RegisterBaggage(new BaggageRegistrationRequest
-        {
-            BookingRef = reference,
-            Luggage = luggage,
-        });
+        var reply = gateway.RegisterBaggage(reference, luggage);
 
         var response = new BaggageRegistrationResponse
         {

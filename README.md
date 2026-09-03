@@ -72,6 +72,7 @@ Notes:
 | `/api/v1/bookings/{ref}/check-in` | REST | one-shot check-in with optional polymorphic bag array (`bags: Baggage[]`) |
 | `/api/v1/bookings/{ref}/baggage` | REST | polymorphic single-bag drop (also one-per-type) |
 | `/api/v1/_protection` | REST | current abuse-protection settings (rendered on the landing page) |
+| `/api/v1/admin/reset` | REST | reset all in-memory demo data to fresh state (see below) |
 | `/swagger` | REST | Swagger UI for the whole REST surface |
 | `/soap/booking?wsdl` | SOAP 1.1 | reservations system |
 | `/soap/flights?wsdl` | SOAP 1.1 | airport flight control (read-only) |
@@ -85,8 +86,26 @@ REST is documented through **Swagger** (`/swagger`, machine-readable at
 
 `/` serves a static directory page (`wwwroot/index.html`) that lists the four services with
 their Swagger/WSDL links, the frozen test data below, business-rule and warning-translation
-quick references, chaos-header examples, the current protection limits, and **live state**
-for the hot flights and demo bookings (refreshed every 20 s via the public REST API).
+quick references, chaos-header examples, a reset button, the current protection limits, and
+**live state** for the hot flights and demo bookings (refreshed every 20 s via the public
+REST API).
+
+### Reset demo data
+
+`POST /api/v1/admin/reset` restores fresh state without restarting the system:
+
+```bash
+curl -X POST http://localhost:5000/api/v1/admin/reset
+# {"reset":true,"resetAtUtc":"...","demoBookings":["GZT001","QWX452","LMN789","PRS205","TRV310"]}
+```
+
+What it does (via a real SOAP round-trip to the booking backend): drops every booking,
+replays the five frozen demo seeds and restarts the deterministic counters (booking refs
+from `T00001`, bag tags from `HB-00000001`, boarding sequences from 201).
+
+Caveats, by design: it is **global** (no sessions - one call resets the whole server),
+**no concurrency guarantees** (a reset racing with in-flight calls may interleave), chaos
+drills are bypassed so reset always succeeds, and abuse rate limits still apply.
 
 ## Abuse protection
 
@@ -249,9 +268,10 @@ curl -X POST http://localhost:5000/api/v1/bookings/GZT001/baggage -H "Content-Ty
   -d '{"type":"checked","weightKg":31,"color":"black","lengthCm":75}'
 
 # raw SOAP one-shot check-in with xsi:type polymorphic array
+# (flat parameters - bookingRef + bags - no meaningless <request> wrapper)
 curl -X POST http://localhost:5000/soap/luggage -H "SOAPAction: \"http://hummingbird.airlines/luggage/CheckIn\"" \
   -H "Content-Type: text/xml; charset=utf-8" \
-  -d '<?xml version="1.0"?><soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:lug="http://hummingbird.airlines/luggage"><soapenv:Body><lug:CheckIn><request xmlns:d4p1="http://schemas.datacontract.org/2004/07/Hummingbird.Airlines.Backend.Services" xmlns:b="http://schemas.datacontract.org/2004/07/Hummingbird.Airlines.Backend.Domain" xmlns:i="http://www.w3.org/2001/XMLSchema-instance"><d4p1:BookingRef>QWX452</d4p1:BookingRef><d4p1:Bags><b:Baggage i:type="b:CheckedBaggage"><b:WeightKg>22</b:WeightKg><b:LengthCm>70</b:LengthCm></b:Baggage><b:Baggage i:type="b:CarryOnBaggage"><b:WeightKg>7</b:WeightKg><b:HasLaptop>true</b:HasLaptop></b:Baggage></d4p1:Bags></request></lug:CheckIn></soapenv:Body></soapenv:Envelope>'
+  -d '<?xml version="1.0"?><soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:lug="http://hummingbird.airlines/luggage"><soapenv:Body><lug:CheckIn><lug:bookingRef>QWX452</lug:bookingRef><lug:bags xmlns:b="http://schemas.datacontract.org/2004/07/Hummingbird.Airlines.Backend.Domain" xmlns:i="http://www.w3.org/2001/XMLSchema-instance"><b:Baggage i:type="b:CheckedBaggage"><b:WeightKg>22</b:WeightKg><b:LengthCm>70</b:LengthCm></b:Baggage><b:Baggage i:type="b:CarryOnBaggage"><b:WeightKg>7</b:WeightKg><b:HasLaptop>true</b:HasLaptop></b:Baggage></lug:bags></lug:CheckIn></soapenv:Body></soapenv:Envelope>'
 ```
 
 ## License & legal notices

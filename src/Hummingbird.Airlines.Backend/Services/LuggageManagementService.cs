@@ -18,23 +18,33 @@ public class LuggageManagementService : ILuggageManagementService
     /// <summary>Deterministic sequential bag tag source (process-wide, monotonic).</summary>
     private static long _tagCounter;
 
+    /// <summary>
+    /// Restore fresh-state sequence values: live check-ins restart at 201,
+    /// bag tags restart at HB-00000001.
+    /// </summary>
+    public static void ResetSequences()
+    {
+        Interlocked.Exchange(ref _boardingSequence, 200);
+        Interlocked.Exchange(ref _tagCounter, 0);
+    }
+
     public LuggageManagementService(FlightScheduleStore flights, BookingStore bookings)
     {
         _flights = flights;
         _bookings = bookings;
     }
 
-    public CheckInResult CheckIn(CheckInRequest request)
+    public CheckInResult CheckIn(string bookingRef, List<Baggage> bags)
     {
         Chaos.Apply();
 
-        if (request is null || string.IsNullOrWhiteSpace(request.BookingRef))
+        if (string.IsNullOrWhiteSpace(bookingRef))
         {
             throw Faults.Create(FaultCodes.InvalidRequest, "bookingRef is required");
         }
 
-        var booking = _bookings.Update(request.BookingRef, _ => { })
-            ?? throw Faults.Create(FaultCodes.BookingNotFound, $"No booking found for reference '{request.BookingRef}'");
+        var booking = _bookings.Update(bookingRef, _ => { })
+            ?? throw Faults.Create(FaultCodes.BookingNotFound, $"No booking found for reference '{bookingRef}'");
 
         if (booking.IsCheckedIn)
         {
@@ -57,7 +67,7 @@ public class LuggageManagementService : ILuggageManagementService
         }
 
         // ---- validate polymorphic bag array atomically (at most one of each kind) ----
-        var incoming = request.Bags ?? [];
+        var incoming = bags ?? [];
         if (incoming.Count > 2)
         {
             throw Faults.Create(FaultCodes.BaggageTypeLimit, "At most one checked bag and one carry-on per passenger");
@@ -134,22 +144,22 @@ public class LuggageManagementService : ILuggageManagementService
         };
     }
 
-    public BaggageRegistrationReply RegisterBaggage(BaggageRegistrationRequest request)
+    public BaggageRegistrationReply RegisterBaggage(string bookingRef, Baggage luggage)
     {
         Chaos.Apply();
 
-        if (request?.Luggage is null || string.IsNullOrWhiteSpace(request.BookingRef))
+        if (luggage is null || string.IsNullOrWhiteSpace(bookingRef))
         {
             throw Faults.Create(FaultCodes.InvalidRequest, "bookingRef and luggage are required");
         }
 
-        if (request.Luggage.WeightKg <= 0 || request.Luggage.WeightKg > 100)
+        if (luggage.WeightKg <= 0 || luggage.WeightKg > 100)
         {
             throw Faults.Create(FaultCodes.InvalidRequest, "luggage weight must be between 0 and 100 kg");
         }
 
-        var booking = _bookings.Update(request.BookingRef, _ => { })
-            ?? throw Faults.Create(FaultCodes.BookingNotFound, $"No booking found for reference '{request.BookingRef}'");
+        var booking = _bookings.Update(bookingRef, _ => { })
+            ?? throw Faults.Create(FaultCodes.BookingNotFound, $"No booking found for reference '{bookingRef}'");
 
         if (!booking.IsCheckedIn)
         {
@@ -165,7 +175,7 @@ public class LuggageManagementService : ILuggageManagementService
         }
 
         // one bag per type
-        var isChecked = request.Luggage is CheckedBaggage;
+        var isChecked = luggage is CheckedBaggage;
         if (isChecked && booking.Bags.OfType<CheckedBaggage>().Any())
         {
             throw Faults.Create(FaultCodes.BaggageTypeLimit, "Passenger already has a checked bag (max one per type)");
@@ -176,27 +186,27 @@ public class LuggageManagementService : ILuggageManagementService
         }
 
         var warnings = new List<string>();
-        var allowance = request.Luggage switch
+        var allowance = luggage switch
         {
             CheckedBaggage => BusinessRules.CheckedAllowanceKg(booking.CabinClass),
             CarryOnBaggage => BusinessRules.CarryOnAllowanceKg(booking.CabinClass),
             _ => double.MaxValue,
         };
 
-        if (request.Luggage.WeightKg > allowance)
+        if (luggage.WeightKg > allowance)
         {
-            var type = request.Luggage is CheckedBaggage ? "checked" : "carryon";
+            var type = luggage is CheckedBaggage ? "checked" : "carryon";
             warnings.Add(string.Format(
                 CultureInfo.InvariantCulture,
                 "W|BAGGAGE_WEIGHT|{0}|{1:F1}|{2:F1}",
-                type, request.Luggage.WeightKg, allowance));
+                type, luggage.WeightKg, allowance));
         }
 
-        request.Luggage.TagId = string.IsNullOrWhiteSpace(request.Luggage.TagId)
+        luggage.TagId = string.IsNullOrWhiteSpace(luggage.TagId)
             ? $"HB-{Interlocked.Increment(ref _tagCounter):D8}"
-            : request.Luggage.TagId;
+            : luggage.TagId;
 
-        _bookings.Update(request.BookingRef, b => b.Bags.Add(request.Luggage));
+        _bookings.Update(bookingRef, b => b.Bags.Add(luggage));
 
         return new BaggageRegistrationReply
         {

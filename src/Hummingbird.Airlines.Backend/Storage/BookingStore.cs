@@ -13,9 +13,14 @@ public sealed class BookingStore
 
     private readonly object _lock = new();
     private readonly List<Booking> _bookings = new();
+    private readonly FlightScheduleStore _flights;
     private long _refCounter;
 
-    public BookingStore(FlightScheduleStore flights) => SeedDemoBookings(flights);
+    public BookingStore(FlightScheduleStore flights)
+    {
+        _flights = flights;
+        SeedDemoBookings(flights);
+    }
 
     public int Count { get { lock (_lock) return _bookings.Count; } }
 
@@ -85,6 +90,28 @@ public sealed class BookingStore
     /// they contain no T-prefix.)
     /// </summary>
     public string GenerateRef() => $"T{Interlocked.Increment(ref _refCounter):D5}";
+
+    public IReadOnlyList<Booking> GetAll()
+    {
+        lock (_lock)
+        {
+            return _bookings.OrderBy(b => b.CreatedAtUtc).ToList();
+        }
+    }
+
+    /// <summary>
+    /// Restore fresh state: drop every booking, restart the deterministic ref counter,
+    /// and replay the frozen demo seeds with fresh timestamps.
+    /// </summary>
+    public void Reset()
+    {
+        lock (_lock)
+        {
+            _bookings.Clear();
+            _refCounter = 0;
+            SeedDemoBookings(_flights);
+        }
+    }
 
     private void SeedDemoBookings(FlightScheduleStore flights)
     {
